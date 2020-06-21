@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public float radius;         // 큐브의 한 블럭의 반지름
     public int Level { get; set; }
     public List<Tile> TileList { get; set; }   // 타일을 관리할 리스트
-    public List<KeyValuePair<Transform, CustomVariables.TILE>> ItemList { get; set; }
+
     public bool IsCubeSelected { get; set; }
     public CustomVariables.TURN PlayerTurn { get; set; }
     public int currentTurn { get;set; }
@@ -28,8 +28,6 @@ public class GameManager : MonoBehaviour
     public int Score { get; set; }
 
     public int itemPercentage;
-
-    public bool IsDoingBingo { get; set; }
 
     private void Awake()
     {
@@ -46,13 +44,10 @@ public class GameManager : MonoBehaviour
 
         PlayerTurn = CustomVariables.TURN.PLAYER_TURN;
         TileList = new List<Tile>();
-        ItemList = new List<KeyValuePair<Transform, CustomVariables.TILE>>();
 
         currentTurn = 0;
         IsCubeSelected = false;
         PlayerTurnEnd = false;
-
-        IsDoingBingo = false;
     }
 
     void Update()
@@ -63,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     private void ProcessInput()
     {
-        if (!IsCubeSelected)
+        if (false == IsCubeSelected)
             CameraManager.instance.RotateInput();
         CameraManager.instance.ProcessInput();
     }
@@ -77,14 +72,11 @@ public class GameManager : MonoBehaviour
                 PlayerTurnEnd = false;
                 NextTurn();
             }
-            //if (false == IsDoingBingo)
+            if ( false == CubeManager.instance.IsWorldShaking)
                 CubeManager.instance.ProcessMouseInput();
         }
         else if (PlayerTurn == CustomVariables.TURN.EVENT_TURN)
         {       // 아이템 타일 파괴 이벤트
-            foreach (var item in ItemList)
-                ItemManager.instance.Activate(item.Key, item.Value);
-            ItemList.Clear();
             NextTurn();
         }
         else if (PlayerTurn == CustomVariables.TURN.PREPARE_TURN)
@@ -103,6 +95,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("잘못된 접근입니다.");
         }
+       
         ConfirmBingo();
         UIManager.instance.UpdateScore();
         UIManager.instance.UpdateColorCount();

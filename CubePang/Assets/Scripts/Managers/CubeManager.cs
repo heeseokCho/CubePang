@@ -6,7 +6,7 @@ public class CubeManager : MonoBehaviour
 {
     public static CubeManager instance = null;
 
-    public GameObject cubePrefab;
+    public Cube cubePrefab;
     public Tile tilePrefab;
     public GameObject mouseMoveParticle;
     private GameObject playParticle;
@@ -14,7 +14,7 @@ public class CubeManager : MonoBehaviour
 
     public LayerMask TileLayer;
 
-    private List<GameObject> cubeList;
+    public List<Cube> cubeList;
     //큐브와 타일 인스턴스들을 저장하기 위한 리스트
 
     private Transform cubeHolder;
@@ -69,8 +69,7 @@ public class CubeManager : MonoBehaviour
     private float clickTime;
     private Vector3 PrevTilePosition;
 
-    private float holdingTime;
-    public bool isWorldShaking { get; set; }
+    public bool IsWorldShaking { get; set; }
 
     void Awake()
     {
@@ -83,12 +82,12 @@ public class CubeManager : MonoBehaviour
         PrevTilePosition = Vector3.zero;
         clickedColor = Color.white;
 
-        cubeList = new List<GameObject>();
+        cubeList = new List<Cube>();
 
         cubeHolder = new GameObject("CubeHolder").transform;
         axis = new Vector3(0, 0, 0);
         isSelect = false;
-        isWorldShaking = false;
+        IsWorldShaking = false;
         rotatedAngle = 0;
 
         playParticle = Instantiate(mouseMoveParticle);
@@ -295,8 +294,6 @@ public class CubeManager : MonoBehaviour
                 FinishRotation();
                 GameManager.instance.IsCubeSelected = false;
 
-                holdingTime = 0.0f;
-
                 playParticle.GetComponent<ParticleSystem>().Stop();
             }
         }
@@ -421,5 +418,17 @@ public class CubeManager : MonoBehaviour
         oldScreenPos = RotationToAxisX * Input.mousePosition;
 
         isDirConfirmed = true;
+    }
+
+    public void OccurCubeEarthQuake(float strength)
+    {
+        if (true == IsWorldShaking)
+            return;
+
+        IsWorldShaking = true;
+        for(int i = 0; i < cubeList.Count; ++i)
+        {
+            StartCoroutine(cubeList[i].Shake(strength));
+        }
     }
 }

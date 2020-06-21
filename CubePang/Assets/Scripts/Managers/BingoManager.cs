@@ -9,8 +9,6 @@ public class BingoManager : MonoBehaviour
     public GameObject itemSpawnerPrefab;
 
     public List<GameObject> itemSpawnerList;
-
-    public List<Item> itemList;  // 아이템 관리할 리스트
     List<int> centerIndices = new List<int>() { 10, 23, 26, 27, 30, 43 };   // 3 x 3 큐브의 가운데 타일 인덱스입니다.
 
     public int totalItemSummonCount;
@@ -24,9 +22,6 @@ public class BingoManager : MonoBehaviour
             Destroy(gameObject);
 
         itemSpawnerList = new List<GameObject>();
-
-        // 각 게임객체를 담는 리스트를 초기화 합니다.
-        itemList = new List<Item>();
     }
 
     public bool CheckLineEvent(Tile tile)
@@ -281,7 +276,6 @@ public class BingoManager : MonoBehaviour
         if (bingoTiles.Count == 0)
             return false;
 
-        Debug.Log("SameColorBomb : " + side + " - " + bingoTiles.Count);
         foreach (Tile tile in bingoTiles)
         {
             tile.TakeDamage();
@@ -387,7 +381,6 @@ public class BingoManager : MonoBehaviour
 
     public IEnumerator BingoEvent(CustomVariables.TILE type, Tile tile = null)
     {
-        GameManager.instance.IsDoingBingo = true;
         yield return new WaitForFixedUpdate();
         if (type == CustomVariables.TILE.EMPTY)
         {
@@ -418,7 +411,6 @@ public class BingoManager : MonoBehaviour
             CheckSameSideBombEvent(tile);
             yield return new WaitForSeconds(0.4f);
         }
-        GameManager.instance.IsDoingBingo = false;
     }
 
     public Tile GetMiddleTile()

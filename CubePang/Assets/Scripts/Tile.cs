@@ -42,7 +42,10 @@ public class Tile : MonoBehaviour
         ++GameManager.instance.Score;
 
         if (child != null)
+        {
             ItemManager.instance.Activate(transform, type);
+            CubeManager.instance.OccurCubeEarthQuake(360.0f);
+        }
     }
 
     public bool IsSameColor(Color color)
