@@ -225,7 +225,10 @@ public class BingoManager : MonoBehaviour
             for (int i = 0; i < centerIndices.Count; ++i)
             {
                 while (true == CheckLineEvent(GameManager.Instance.TileList[centerIndices[i]]))
+                {
+                    SoundManager.Instance.PlayExplosionSound();
                     yield return new WaitForSeconds(0.4f);
+                }
             }
         }
     }
@@ -233,23 +236,31 @@ public class BingoManager : MonoBehaviour
     public IEnumerator BingoEventByColorBomb(Color color)
     {
         yield return new WaitForFixedUpdate();
-
         if (CheckSameColorBombEvent(color))
+        {
+            SoundManager.Instance.PlayExplosionSound();
             yield return new WaitForSeconds(0.4f);
+        }
     }
 
     public IEnumerator BingoEventByLineBomb(Tile tile)
     {
         yield return new WaitForFixedUpdate();
         if (CheckSameLineBombEvent(tile))
+        {
+            SoundManager.Instance.PlayExplosionSound();
             yield return new WaitForSeconds(0.4f);
+        }
     }
 
     public IEnumerator BingoEventBySideBomb(Tile tile)
     {
         yield return new WaitForFixedUpdate();
         if (CheckSameSideBombEvent(tile))
+        {
+            SoundManager.Instance.PlayExplosionSound();
             yield return new WaitForSeconds(0.4f);
+        }
     }
 
 

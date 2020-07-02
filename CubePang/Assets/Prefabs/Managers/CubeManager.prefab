@@ -52,3 +52,4 @@ MonoBehaviour:
   TileLayer:
     serializedVersion: 2
     m_Bits: 256
+  cubeList: []

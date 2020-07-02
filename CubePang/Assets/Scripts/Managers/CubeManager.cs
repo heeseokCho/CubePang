@@ -179,6 +179,7 @@ public class CubeManager : MonoBehaviour
     {
         isAdjusting = true;
         float stackedAdjustAngle = 0;
+        bool isSoundPlayed = false;
 
         while (true)
         {
@@ -186,6 +187,12 @@ public class CubeManager : MonoBehaviour
             stackedAdjustAngle += adjustAngle * curTime * 2;
             for (int i = 0; i < cubeCount * cubeCount; i++)
                 cubeList[idx[i]].transform.RotateAround(new Vector3(0, 0, 0), axis, -adjustAngle * curTime * 2);
+
+            if ( false == isSoundPlayed && 1.0f < adjustAngle)
+            {
+                SoundManager.Instance.PlayCubeSound();
+                isSoundPlayed = true;
+            }
 
             if (Mathf.Abs(stackedAdjustAngle) >= Mathf.Abs(adjustAngle))
                 break;
@@ -256,7 +263,8 @@ public class CubeManager : MonoBehaviour
         {
             float tmpAngle = 0;
             tmpAngle = ((RotationToAxisX * Input.mousePosition).x - oldScreenPos.x) * reverseRotation * 0.3f;
-
+            if (Mathf.Abs(tmpAngle) > 3f)
+                SoundManager.Instance.PlayCubeSound();
             oldScreenPos = RotationToAxisX * Input.mousePosition;
 
             rotatedAngle += tmpAngle;
