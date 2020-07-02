@@ -63,15 +63,15 @@ public class ItemManager : MonoBehaviour
 
         if (type == CustomVariables.TILE.COLOR_BOMB)
         {
-            StartCoroutine(BingoManager.instance.BingoEvent(CustomVariables.TILE.COLOR_BOMB, tile));
+            StartCoroutine(BingoManager.instance.BingoEventByColorBomb(tile.child.GetComponent<MeshRenderer>().material.color));
         }
         else if (type == CustomVariables.TILE.LINE_BOMB)
         {
-            StartCoroutine(BingoManager.instance.BingoEvent(CustomVariables.TILE.LINE_BOMB, tile));
+            StartCoroutine(BingoManager.instance.BingoEventByLineBomb(tile));
         }
         else if (type == CustomVariables.TILE.SIDE_BOMB)
         {
-            StartCoroutine(BingoManager.instance.BingoEvent(CustomVariables.TILE.SIDE_BOMB, tile));
+            StartCoroutine(BingoManager.instance.BingoEventBySideBomb(tile));
         }
 
         tile.type = CustomVariables.TILE.EMPTY;

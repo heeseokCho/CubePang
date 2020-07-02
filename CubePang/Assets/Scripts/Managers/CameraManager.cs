@@ -126,4 +126,21 @@ public class CameraManager : MonoBehaviour
                 isCameraSelect = false;
         }
     }
+
+    public IEnumerator ShakeCamera(float duration = 0.6f, float magnitudePos = 0.1f)
+    {
+        float passTime = 0.0f;
+        Vector3 originPosition = transform.localPosition;
+
+        while(passTime < duration)
+        {
+            Vector3 ShakePosition = Random.insideUnitSphere;
+            transform.localPosition = originPosition + ShakePosition * magnitudePos;
+
+            passTime += Time.deltaTime;
+
+            yield return null;
+        }
+        transform.localPosition = originPosition;
+    }
 }

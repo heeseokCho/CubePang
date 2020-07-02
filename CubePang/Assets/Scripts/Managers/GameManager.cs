@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("잘못된 접근입니다.");
         }
-       
+       if( false == IsCubeSelected)
         ConfirmBingo();
         UIManager.instance.UpdateScore();
         UIManager.instance.UpdateColorCount();
