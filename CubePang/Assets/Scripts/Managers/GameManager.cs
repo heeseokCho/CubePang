@@ -5,19 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance = null;
-
-   // public GameObject cameraManagerPrefab;
-   // public GameObject cubeManagerPrefab;
-   // public GameObject bingoManagerPrefab;
-   // public GameObject uiManagerPrefab;
+    public static GameManager Instance = null;
     public LayerMask tileLayer;
 
     private Color originTileColor;
 
+
+    public int CubeCount;        // 큐브의 규격 : 3X3 => 3,  4X4 => 4  
     public bool PlayerTurnEnd { get; set; }
-    public int CubeCount { get; set; }           // 큐브의 규격 : 3X3 => 3,  4X4 => 4  
-    public float radius;         // 큐브의 한 블럭의 반지름
     public int Level { get; set; }
     public List<Tile> TileList { get; set; }   // 타일을 관리할 리스트
 
@@ -27,18 +22,14 @@ public class GameManager : MonoBehaviour
 
     public int Score { get; set; }
 
-    public int itemPercentage;
+    private int itemPercentage;
 
     private void Awake()
     {
         // 중복된 인스턴스 객체 생성을 방지합니다.
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
 
-        CubeCount = 3;
-        radius = 0.5f;
         Level = 4;
         itemPercentage = 20;
 
@@ -59,8 +50,8 @@ public class GameManager : MonoBehaviour
     private void ProcessInput()
     {
         if (false == IsCubeSelected)
-            CameraManager.instance.RotateInput();
-        CameraManager.instance.ProcessInput();
+            CameraManager.Instance.RotateInput();
+        CameraManager.Instance.ProcessInput();
     }
 
     private void ProcessTurn()
@@ -72,8 +63,8 @@ public class GameManager : MonoBehaviour
                 PlayerTurnEnd = false;
                 NextTurn();
             }
-            if ( false == CubeManager.instance.IsWorldShaking)
-                CubeManager.instance.ProcessMouseInput();
+            if ( false == CubeManager.Instance.IsWorldShaking)
+                CubeManager.Instance.ProcessMouseInput();
         }
         else if (PlayerTurn == CustomVariables.TURN.EVENT_TURN)
         {       // 아이템 타일 파괴 이벤트
@@ -87,7 +78,7 @@ public class GameManager : MonoBehaviour
                 Level = 5;
 
             if (Random.Range(0, 100) < itemPercentage)
-                ItemManager.instance.GenerateItem();
+                ItemManager.Instance.GenerateItem();
 
             NextTurn();
         }
@@ -97,8 +88,8 @@ public class GameManager : MonoBehaviour
         }
        if( false == IsCubeSelected)
         ConfirmBingo();
-        UIManager.instance.UpdateScore();
-        UIManager.instance.UpdateColorCount();
+        UIManager.Instance.UpdateScore();
+        UIManager.Instance.UpdateColorCount();
 
     }
 
@@ -116,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void ConfirmBingo()
     {
-        StartCoroutine(BingoManager.instance.BingoEvent(CustomVariables.TILE.EMPTY));
+        StartCoroutine(BingoManager.Instance.BingoEvent(CustomVariables.TILE.EMPTY));
     }
 
     public Tile GetTile(Transform target)

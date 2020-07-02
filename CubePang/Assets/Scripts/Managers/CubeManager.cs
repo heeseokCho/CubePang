@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CubeManager : MonoBehaviour
 {
-    public static CubeManager instance = null;
+    public static CubeManager Instance = null;
 
     public Cube cubePrefab;
     public Tile tilePrefab;
@@ -22,7 +22,7 @@ public class CubeManager : MonoBehaviour
     private Transform backgroundCubeHolder;
 
     private int cubeCount;
-    private float radius;
+    public float Radius { get; set; }
     //타일 하나의 반지름
 
     private float rotatedAngle;
@@ -73,10 +73,8 @@ public class CubeManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
 
         clickTime = Time.time;
         PrevTilePosition = Vector3.zero;
@@ -95,10 +93,10 @@ public class CubeManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.ConfirmBingo();
+        GameManager.Instance.ConfirmBingo();
 
-        cubeCount = GameManager.instance.CubeCount;
-        radius = GameManager.instance.radius;
+        cubeCount = GameManager.Instance.CubeCount;
+        Radius = 0.5f;
         idx = new int[cubeCount * cubeCount];
 
         float margin = 0.0f;
@@ -107,7 +105,7 @@ public class CubeManager : MonoBehaviour
             for (int j = 0; j < cubeCount; ++j)
                 for (int k = 0; k < cubeCount; ++k)
                 {
-                    cubeList.Add(Instantiate(cubePrefab, new Vector3(radius * (2 * i - (cubeCount - 1)), radius * (2 * j - (cubeCount - 1)), radius * (2 * k - (cubeCount - 1))), Quaternion.identity));
+                    cubeList.Add(Instantiate(cubePrefab, new Vector3(Radius * (2 * i - (cubeCount - 1)), Radius * (2 * j - (cubeCount - 1)), Radius * (2 * k - (cubeCount - 1))), Quaternion.identity));
                     cubeList[cubeList.Count - 1].transform.SetParent(cubeHolder);
                 }
 
@@ -118,43 +116,43 @@ public class CubeManager : MonoBehaviour
             if (!Physics.Linecast(cubeList[i].transform.position, cubeList[i].transform.position + cubeList[i].transform.up))
             {
                 Tile tile;
-                tile = Instantiate(tilePrefab, cubeList[i].transform.position + cubeList[i].transform.up * (radius + margin), Quaternion.identity, cubeList[i].transform);
-                GameManager.instance.TileList.Add(tile);
+                tile = Instantiate(tilePrefab, cubeList[i].transform.position + cubeList[i].transform.up * (Radius + margin), Quaternion.identity, cubeList[i].transform);
+                GameManager.Instance.TileList.Add(tile);
             }
 
             if (!Physics.Linecast(cubeList[i].transform.position, cubeList[i].transform.position - cubeList[i].transform.up))
             {
                 Tile tile;
-                tile = Instantiate(tilePrefab, cubeList[i].transform.position - cubeList[i].transform.up * (radius + margin), Quaternion.Euler(0, 0, 180), cubeList[i].transform);
-                GameManager.instance.TileList.Add(tile);
+                tile = Instantiate(tilePrefab, cubeList[i].transform.position - cubeList[i].transform.up * (Radius + margin), Quaternion.Euler(0, 0, 180), cubeList[i].transform);
+                GameManager.Instance.TileList.Add(tile);
             }
 
             if (!Physics.Linecast(cubeList[i].transform.position, cubeList[i].transform.position + cubeList[i].transform.right))
             {
                 Tile tile;
-                tile = Instantiate(tilePrefab, cubeList[i].transform.position + cubeList[i].transform.right * (radius + margin), Quaternion.Euler(0, 0, -90), cubeList[i].transform);
-                GameManager.instance.TileList.Add(tile);
+                tile = Instantiate(tilePrefab, cubeList[i].transform.position + cubeList[i].transform.right * (Radius + margin), Quaternion.Euler(0, 0, -90), cubeList[i].transform);
+                GameManager.Instance.TileList.Add(tile);
             }
 
             if (!Physics.Linecast(cubeList[i].transform.position, cubeList[i].transform.position - cubeList[i].transform.right))
             {
                 Tile tile;
-                tile = Instantiate(tilePrefab, cubeList[i].transform.position - cubeList[i].transform.right * (radius + margin), Quaternion.Euler(0, 0, 90), cubeList[i].transform);
-                GameManager.instance.TileList.Add(tile);
+                tile = Instantiate(tilePrefab, cubeList[i].transform.position - cubeList[i].transform.right * (Radius + margin), Quaternion.Euler(0, 0, 90), cubeList[i].transform);
+                GameManager.Instance.TileList.Add(tile);
             }
 
             if (!Physics.Linecast(cubeList[i].transform.position, cubeList[i].transform.position + cubeList[i].transform.forward))
             {
                 Tile tile;
-                tile = Instantiate(tilePrefab, cubeList[i].transform.position + cubeList[i].transform.forward * (radius + margin), Quaternion.Euler(90, 0, 0), cubeList[i].transform);
-                GameManager.instance.TileList.Add(tile);
+                tile = Instantiate(tilePrefab, cubeList[i].transform.position + cubeList[i].transform.forward * (Radius + margin), Quaternion.Euler(90, 0, 0), cubeList[i].transform);
+                GameManager.Instance.TileList.Add(tile);
             }
 
             if (!Physics.Linecast(cubeList[i].transform.position, cubeList[i].transform.position - cubeList[i].transform.forward))
             {
                 Tile tile;
-                tile = Instantiate(tilePrefab, cubeList[i].transform.position - cubeList[i].transform.forward * (radius + margin), Quaternion.Euler(-90, 0, 0), cubeList[i].transform);
-                GameManager.instance.TileList.Add(tile);
+                tile = Instantiate(tilePrefab, cubeList[i].transform.position - cubeList[i].transform.forward * (Radius + margin), Quaternion.Euler(-90, 0, 0), cubeList[i].transform);
+                GameManager.Instance.TileList.Add(tile);
             }
             cubeList[i].GetComponent<BoxCollider>().enabled = true;
         }
@@ -164,9 +162,9 @@ public class CubeManager : MonoBehaviour
             cube.GetComponent<BoxCollider>().enabled = false;
         }
 
-        foreach (var tile in GameManager.instance.TileList)
+        foreach (var tile in GameManager.Instance.TileList)
         {
-            tile.transform.GetComponent<MeshRenderer>().material.color = TileColors.RandomColor(GameManager.instance.Level);
+            tile.transform.GetComponent<MeshRenderer>().material.color = TileColors.RandomColor(GameManager.Instance.Level);
             tile.type = CustomVariables.TILE.EMPTY;
         }
     }
@@ -174,7 +172,7 @@ public class CubeManager : MonoBehaviour
     private void AttemptToSelectTile()
     {
         oldScreenPos = Input.mousePosition;
-        GameManager.instance.IsCubeSelected = true;
+        GameManager.Instance.IsCubeSelected = true;
     }
 
     private IEnumerator AdjustRotation(float destAngle)
@@ -200,8 +198,8 @@ public class CubeManager : MonoBehaviour
 
         if (destAngle != 0)
         {
-            GameManager.instance.PlayerTurnEnd = true;
-            GameManager.instance.ConfirmBingo();
+            GameManager.Instance.PlayerTurnEnd = true;
+            GameManager.Instance.ConfirmBingo();
         }
         ResetInform();
     }
@@ -242,7 +240,7 @@ public class CubeManager : MonoBehaviour
         idx = new int[cubeCount * cubeCount];
         axis = new Vector3(0, 0, 0);
         isSelect = false;
-        GameManager.instance.IsCubeSelected = false;
+        GameManager.Instance.IsCubeSelected = false;
         isAdjusting = false;
         colObjectMeshRenderer.material.color = prevColor;
     }
@@ -292,7 +290,7 @@ public class CubeManager : MonoBehaviour
             if (isSelect)
             {
                 FinishRotation();
-                GameManager.instance.IsCubeSelected = false;
+                GameManager.Instance.IsCubeSelected = false;
 
                 playParticle.GetComponent<ParticleSystem>().Stop();
             }
@@ -321,7 +319,7 @@ public class CubeManager : MonoBehaviour
                 if (!isSelect)
                 {
                     isSelect = true;
-                    colObject = GameManager.instance.GetTile(hit.transform);
+                    colObject = GameManager.Instance.GetTile(hit.transform);
                     colObjectMeshRenderer = colObject.transform.GetComponent<MeshRenderer>();
                     if (colObjectMeshRenderer.material.color != clickedColor && prevColor != colObjectMeshRenderer.material.color)
                         prevColor = colObjectMeshRenderer.material.color;
@@ -347,20 +345,20 @@ public class CubeManager : MonoBehaviour
             if (Mathf.Abs(deltaVector.y) > Mathf.Abs(deltaVector.z))
             {
                 for (int i = 0; i < cubeList.Count; i++)
-                    if (colCubePos.z - radius < cubeList[i].transform.position.z && cubeList[i].transform.position.z < colCubePos.z + radius)
+                    if (colCubePos.z - Radius < cubeList[i].transform.position.z && cubeList[i].transform.position.z < colCubePos.z + Radius)
                         idx[j++] = i;
 
                 axis = new Vector3(0, 0, 1);
-                addVector.y += radius;
+                addVector.y += Radius;
             }
             else
             {
                 for (int i = 0; i < cubeList.Count; i++)
-                    if (colCubePos.y - radius < cubeList[i].transform.position.y && cubeList[i].transform.position.y < colCubePos.y + radius)
+                    if (colCubePos.y - Radius < cubeList[i].transform.position.y && cubeList[i].transform.position.y < colCubePos.y + Radius)
                         idx[j++] = i;
 
                 axis = new Vector3(0, -1, 0);
-                addVector.z += radius;
+                addVector.z += Radius;
             }
         }
         else if (upVector.y > 0.9 || upVector.y < -0.9)
@@ -368,20 +366,20 @@ public class CubeManager : MonoBehaviour
             if (Mathf.Abs(deltaVector.x) > Mathf.Abs(deltaVector.z))
             {
                 for (int i = 0; i < cubeList.Count; i++)
-                    if (colCubePos.z - radius < cubeList[i].transform.position.z && cubeList[i].transform.position.z < colCubePos.z + radius)
+                    if (colCubePos.z - Radius < cubeList[i].transform.position.z && cubeList[i].transform.position.z < colCubePos.z + Radius)
                         idx[j++] = i;
 
                 axis = new Vector3(0, 0, -1);
-                addVector.x += radius;
+                addVector.x += Radius;
             }
             else
             {
                 for (int i = 0; i < cubeList.Count; i++)
-                    if (colCubePos.x - radius < cubeList[i].transform.position.x && cubeList[i].transform.position.x < colCubePos.x + radius)
+                    if (colCubePos.x - Radius < cubeList[i].transform.position.x && cubeList[i].transform.position.x < colCubePos.x + Radius)
                         idx[j++] = i;
 
                 axis = new Vector3(1, 0, 0);
-                addVector.z += radius;
+                addVector.z += Radius;
             }
         }
         else if (upVector.z > 0.9 || upVector.z < -0.9)
@@ -389,19 +387,19 @@ public class CubeManager : MonoBehaviour
             if (Mathf.Abs(deltaVector.x) > Mathf.Abs(deltaVector.y))
             {
                 for (int i = 0; i < cubeList.Count; i++)
-                    if (colCubePos.y - radius < cubeList[i].transform.position.y && cubeList[i].transform.position.y < colCubePos.y + radius)
+                    if (colCubePos.y - Radius < cubeList[i].transform.position.y && cubeList[i].transform.position.y < colCubePos.y + Radius)
                         idx[j++] = i;
 
                 axis = new Vector3(0, 1, 0);
-                addVector.x += radius;
+                addVector.x += Radius;
             }
             else
             {
                 for (int i = 0; i < cubeList.Count; i++)
-                    if (colCubePos.x - radius < cubeList[i].transform.position.x && cubeList[i].transform.position.x < colCubePos.x + radius)
+                    if (colCubePos.x - Radius < cubeList[i].transform.position.x && cubeList[i].transform.position.x < colCubePos.x + Radius)
                         idx[j++] = i;
                 axis = new Vector3(-1, 0, 0);
-                addVector.y += radius;
+                addVector.y += Radius;
             }
         }
 
@@ -420,7 +418,7 @@ public class CubeManager : MonoBehaviour
         isDirConfirmed = true;
     }
 
-    public void OccurCubeEarthQuake(float strength)
+    public void OccurCubeEarthQuake(float magnitude = 1.0f, float speed = 360.0f)
     {
         if (true == IsWorldShaking)
             return;
@@ -428,7 +426,7 @@ public class CubeManager : MonoBehaviour
         IsWorldShaking = true;
         for(int i = 0; i < cubeList.Count; ++i)
         {
-            StartCoroutine(cubeList[i].Shake(strength));
+            StartCoroutine(cubeList[i].Shake(magnitude, speed));
         }
     }
 }

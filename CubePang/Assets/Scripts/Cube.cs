@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    public IEnumerator Shake(float strength)
+    public IEnumerator Shake(float magnitude = 1.0f, float speed = 360.0f)
     {
         if (transform.position == Vector3.zero)
             yield break;
@@ -15,8 +15,8 @@ public class Cube : MonoBehaviour
 
         while (true)
         {
-            period += Time.deltaTime *strength;
-            transform.position = startPos + direction * Mathf.Sin( Mathf.PI/180* period);
+            period += Time.deltaTime * speed;
+            transform.position = startPos + direction* magnitude * Mathf.Sin( Mathf.PI/180* period);
 
             if (period > 180.0f)
             {
@@ -25,10 +25,10 @@ public class Cube : MonoBehaviour
             }
             yield return null;
         }
-        if(true == CubeManager.instance.IsWorldShaking)
+        if(true == CubeManager.Instance.IsWorldShaking)
         {
             yield return new WaitForSeconds(0.1f);
-            CubeManager.instance.IsWorldShaking = false;
+            CubeManager.Instance.IsWorldShaking = false;
         }
 
     }

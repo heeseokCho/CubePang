@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    public static ItemManager instance = null;
+    public static ItemManager Instance = null;
 
     public GameObject SameColorBomb;
     public GameObject SameLineBomb;
@@ -12,15 +12,13 @@ public class ItemManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
     }
 
     public void GenerateItem()
     {
-        List<Tile> tileList = GameManager.instance.TileList;
+        List<Tile> tileList = GameManager.Instance.TileList;
 
         int n = Random.Range(1,100);
         int idx;
@@ -59,19 +57,19 @@ public class ItemManager : MonoBehaviour
 
     public void Activate(Transform target, CustomVariables.TILE type)
     {
-        Tile tile = GameManager.instance.GetTile(target);
+        Tile tile = GameManager.Instance.GetTile(target);
 
         if (type == CustomVariables.TILE.COLOR_BOMB)
         {
-            StartCoroutine(BingoManager.instance.BingoEventByColorBomb(tile.child.GetComponent<MeshRenderer>().material.color));
+            StartCoroutine(BingoManager.Instance.BingoEventByColorBomb(tile.child.GetComponent<MeshRenderer>().material.color));
         }
         else if (type == CustomVariables.TILE.LINE_BOMB)
         {
-            StartCoroutine(BingoManager.instance.BingoEventByLineBomb(tile));
+            StartCoroutine(BingoManager.Instance.BingoEventByLineBomb(tile));
         }
         else if (type == CustomVariables.TILE.SIDE_BOMB)
         {
-            StartCoroutine(BingoManager.instance.BingoEventBySideBomb(tile));
+            StartCoroutine(BingoManager.Instance.BingoEventBySideBomb(tile));
         }
 
         tile.type = CustomVariables.TILE.EMPTY;

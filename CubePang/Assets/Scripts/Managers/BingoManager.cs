@@ -4,29 +4,22 @@ using UnityEngine;
 
 public class BingoManager : MonoBehaviour
 {
-    public static BingoManager instance = null;  // 싱글톤 인스턴스
+    public static BingoManager Instance = null;  // 싱글톤 인스턴스
 
-    public GameObject itemSpawnerPrefab;
-
-    public List<GameObject> itemSpawnerList;
-    List<int> centerIndices = new List<int>() { 10, 23, 26, 27, 30, 43 };   // 3 x 3 큐브의 가운데 타일 인덱스입니다.
+    List<int> centerIndices = new List<int>() { 10, 23, 26, 27, 30, 43 };
 
     public int totalItemSummonCount;
     private float currentItemSummonCount;
 
     void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
-
-        itemSpawnerList = new List<GameObject>();
+        if (Instance == null)
+            Instance = this;
     }
 
     public bool CheckLineEvent(Tile tile)
     {
-        List<Tile> tileList = GameManager.instance.TileList;
+        List<Tile> tileList = GameManager.Instance.TileList;
 
         List<Tile> sameSideTiles;
         sameSideTiles = new List<Tile>();
@@ -39,8 +32,8 @@ public class BingoManager : MonoBehaviour
 
         bingoTiles = new List<Tile>();
 
-        int cubeCount = GameManager.instance.CubeCount;
-        float radius = GameManager.instance.radius * 2;
+        int cubeCount = GameManager.Instance.CubeCount;
+        float radius = CubeManager.Instance.Radius * 2;
 
         Vector3 upVector = tile.transform.up;
         // 빙고의 조건
@@ -85,12 +78,12 @@ public class BingoManager : MonoBehaviour
 
         for (int i = 0; i < 6; ++i)
         {
-            if (sameLineTiles[i].Count != GameManager.instance.CubeCount)
+            if (sameLineTiles[i].Count != GameManager.Instance.CubeCount)
                 continue;
 
             bool bingo = true;
             Color compareColor = sameLineTiles[i][0].GetComponent<MeshRenderer>().material.color;
-            for(int j = 0; j < GameManager.instance.CubeCount; ++j)
+            for(int j = 0; j < GameManager.Instance.CubeCount; ++j)
             {
                 if (false == sameLineTiles[i][j].IsSameColor(compareColor))
                 {
@@ -114,12 +107,15 @@ public class BingoManager : MonoBehaviour
             bingoTiles[i].TakeDamage();
         }
 
+        CubeManager.Instance.OccurCubeEarthQuake(0.2f, 720.0f);
+        StartCoroutine(CameraManager.Instance.ShakeCamera(0.2f, 0.08f));
+
         return true;
     }
 
     public bool CheckSameColorBombEvent(Color color)
     {
-        List<Tile> tileList = GameManager.instance.TileList;
+        List<Tile> tileList = GameManager.Instance.TileList;
         List<Tile> bingoTiles = new List<Tile>();
 
         foreach(Tile tile in tileList)
@@ -128,7 +124,6 @@ public class BingoManager : MonoBehaviour
                 bingoTiles.Add(tile);
         }
 
-        Debug.Log(bingoTiles.Count);
         if (bingoTiles.Count == 0)
             return false;
 
@@ -142,7 +137,7 @@ public class BingoManager : MonoBehaviour
 
     public bool CheckSameLineBombEvent(Tile target)
     {
-        List<Tile> tileList = GameManager.instance.TileList;
+        List<Tile> tileList = GameManager.Instance.TileList;
         List<Tile> bingoTiles = new List<Tile>();
 
         Vector3 upVector = target.transform.up;
@@ -201,7 +196,7 @@ public class BingoManager : MonoBehaviour
     
     public bool CheckSameSideBombEvent(Tile target)
     {
-        List<Tile> tileList = GameManager.instance.TileList;
+        List<Tile> tileList = GameManager.Instance.TileList;
         List<Tile> bingoTiles = new List<Tile>();
 
         Vector3 upVector = target.transform.up;
@@ -229,7 +224,7 @@ public class BingoManager : MonoBehaviour
         {
             for (int i = 0; i < centerIndices.Count; ++i)
             {
-                while (true == CheckLineEvent(GameManager.instance.TileList[centerIndices[i]]))
+                while (true == CheckLineEvent(GameManager.Instance.TileList[centerIndices[i]]))
                     yield return new WaitForSeconds(0.4f);
             }
         }
@@ -238,7 +233,7 @@ public class BingoManager : MonoBehaviour
     public IEnumerator BingoEventByColorBomb(Color color)
     {
         yield return new WaitForFixedUpdate();
-        StartCoroutine(CameraManager.instance.ShakeCamera());
+
         if (CheckSameColorBombEvent(color))
             yield return new WaitForSeconds(0.4f);
     }
@@ -246,7 +241,6 @@ public class BingoManager : MonoBehaviour
     public IEnumerator BingoEventByLineBomb(Tile tile)
     {
         yield return new WaitForFixedUpdate();
-        StartCoroutine(CameraManager.instance.ShakeCamera());
         if (CheckSameLineBombEvent(tile))
             yield return new WaitForSeconds(0.4f);
     }
@@ -254,7 +248,6 @@ public class BingoManager : MonoBehaviour
     public IEnumerator BingoEventBySideBomb(Tile tile)
     {
         yield return new WaitForFixedUpdate();
-        StartCoroutine(CameraManager.instance.ShakeCamera());
         if (CheckSameSideBombEvent(tile))
             yield return new WaitForSeconds(0.4f);
     }
@@ -262,15 +255,15 @@ public class BingoManager : MonoBehaviour
 
     public Tile GetMiddleTile()
     {
-        if (GameManager.instance.CubeCount != 3)
+        if (GameManager.Instance.CubeCount != 3)
             return null;
 
         centerIndices.Shuffle();
 
         for (int i = 0; i < centerIndices.Count; ++i)
         {
-            if (GameManager.instance.TileList[centerIndices[i]].type == CustomVariables.TILE.EMPTY)
-                return GameManager.instance.TileList[centerIndices[i]];
+            if (GameManager.Instance.TileList[centerIndices[i]].type == CustomVariables.TILE.EMPTY)
+                return GameManager.Instance.TileList[centerIndices[i]];
         }
 
         return null;

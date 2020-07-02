@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    public static CameraManager instance = null;
+    public static CameraManager Instance = null;
 
     private GameObject endSpot;
     private bool isCameraSelect;
@@ -15,10 +15,8 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
 
         rotateActive = true;
     }

@@ -78,17 +78,17 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'r
+  m_Text: '<color=#ff0000ff>red</color>
 
-    g
+    <color=#00ff00ff>green</color>
 
-    b
+    <color=#0000ffff>blue</color>
 
-    y
+    <color=#ffff00ff>yellow</color>
 
-    c
+    <color=#00ffffff>cyan</color>
 
-    m'
+    <color=#ff00ffff>magenta</color>'
 --- !u!1 &1200796483068367436
 GameObject:
   m_ObjectHideFlags: 0

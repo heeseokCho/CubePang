@@ -37,14 +37,15 @@ public class Tile : MonoBehaviour
 
     public void TakeDamage()
     { 
-        transform.GetComponent<MeshRenderer>().material.color = TileColors.RandomColor(GameManager.instance.Level);
+        transform.GetComponent<MeshRenderer>().material.color = TileColors.RandomColor(GameManager.Instance.Level);
         playParticle.GetComponent<ParticleSystem>().Play();
-        ++GameManager.instance.Score;
+        ++GameManager.Instance.Score;
 
         if (child != null)
         {
-            ItemManager.instance.Activate(transform, type);
-            CubeManager.instance.OccurCubeEarthQuake(360.0f);
+            CubeManager.Instance.OccurCubeEarthQuake();
+            StartCoroutine(CameraManager.Instance.ShakeCamera());
+            ItemManager.Instance.Activate(transform, type);
         }
     }
 
